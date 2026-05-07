@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QuizFlow - Test Your Knowledge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+ 
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="grid-overlay"></div>
+
+  <main class="min-h-screen flex flex-col items-center justify-center px-4 py-8">
+    <!-- Start Screen -->
+    <section id="start-screen" class="w-full max-w-lg text-center">
+      <div class="animate-slide-up">
+        <div class="mb-6">
+          <span class="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent-dim)] rounded-full text-sm text-[var(--accent)] font-medium">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            10 Questions
+          </span>
+        </div>
+        <h1 class="font-display text-4xl sm:text-5xl font-bold mb-4 tracking-tight">
+          Quiz<span class="text-[var(--accent)]">Flow</span>
+        </h1>
+        <p class="text-[var(--muted)] text-lg mb-8 max-w-md mx-auto">
+          Challenge yourself with our curated quiz. Test your knowledge across science, history, and technology.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <button id="start-btn" class="btn-primary">
+            Start Quiz
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quiz Screen -->
+    <section id="quiz-screen" class="w-full max-w-2xl hidden">
+      <div class="mb-6 animate-fade-in">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-sm text-[var(--muted)]">Question <span id="current-num" class="text-[var(--fg)] font-semibold">1</span> of <span id="total-num">10</span></span>
+          <span id="timer" class="font-display font-semibold text-[var(--accent)]">--</span>
+        </div>
+        <div class="progress-track">
+          <div id="progress-bar" class="progress-fill" style="width: 10%"></div>
+        </div>
+      </div>
+
+      <div class="quiz-card p-6 sm:p-8">
+        <div id="question-container">
+          <h2 id="question-text" class="font-display text-xl sm:text-2xl font-semibold mb-6 leading-snug"></h2>
+          
+          <div id="options-container" class="space-y-3">
+            <!-- Options will be inserted here -->
+          </div>
+        </div>
+
+        <div id="feedback" class="mt-6 p-4 rounded-xl hidden">
+          <p id="feedback-text" class="font-medium"></p>
+        </div>
+
+        <div class="mt-8 flex justify-end">
+          <button id="next-btn" class="btn-primary" disabled>
+            Next
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Results Screen -->
+    <section id="results-screen" class="w-full max-w-lg text-center hidden">
+      <div class="quiz-card p-8 sm:p-10">
+        <div class="animate-scale-in mb-8">
+          <div class="score-circle mx-auto mb-6">
+            <svg class="score-ring" width="180" height="180" viewBox="0 0 180 180">
+              <defs>
+                <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#00d9a0"/>
+                  <stop offset="100%" style="stop-color:#00f5d4"/>
+                </linearGradient>
+              </defs>
+              <circle class="score-ring-bg" cx="90" cy="90" r="80"/>
+              <circle id="score-ring-fill" class="score-ring-fill" cx="90" cy="90" r="80"/>
+            </svg>
+            <div class="score-text">
+              <span id="score-value" class="font-display text-5xl font-bold text-[var(--fg)]">0</span>
+              <span class="text-[var(--muted)] text-sm mt-1">out of 10</span>
+            </div>
+          </div>
+          
+          <h2 id="result-title" class="font-display text-2xl sm:text-3xl font-bold mb-2"></h2>
+          <p id="result-message" class="text-[var(--muted)]"></p>
+        </div>
+
+        <div id="stats-container" class="grid grid-cols-3 gap-4 mb-8">
+          <div class="bg-[rgba(0,217,160,0.1)] rounded-xl p-4 animate-slide-up stagger-1">
+            <div class="text-2xl font-display font-bold text-[var(--correct)]" id="correct-count">0</div>
+            <div class="text-xs text-[var(--muted)] mt-1">Correct</div>
+          </div>
+          <div class="bg-[rgba(255,87,87,0.1)] rounded-xl p-4 animate-slide-up stagger-2">
+            <div class="text-2xl font-display font-bold text-[var(--incorrect)]" id="incorrect-count">0</div>
+            <div class="text-xs text-[var(--muted)] mt-1">Incorrect</div>
+          </div>
+          <div class="bg-[rgba(255,255,255,0.05)] rounded-xl p-4 animate-slide-up stagger-3">
+            <div class="text-2xl font-display font-bold" id="accuracy-value">0%</div>
+            <div class="text-xs text-[var(--muted)] mt-1">Accuracy</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center animate-slide-up stagger-4">
+          <button id="restart-btn" class="btn-primary">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6M1 20v-6h6"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+            Play Again
+          </button>
+          <button id="review-btn" class="btn-secondary">
+            Review Answers
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Review Screen -->
+    <section id="review-screen" class="w-full max-w-2xl hidden">
+      <div class="mb-6">
+        <button id="back-to-results" class="btn-secondary text-sm py-2 px-4">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Back to Results
+        </button>
+      </div>
+      
+      <h2 class="font-display text-2xl font-bold mb-6">Review Your Answers</h2>
+      
+      <div id="review-container" class="space-y-4">
+        <!-- Review items will be inserted here -->
+      </div>
+    </section>
+  </main>
+
+ <script src="script.js"></script>
+</body>
+</html>
